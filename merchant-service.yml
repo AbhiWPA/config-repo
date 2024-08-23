@@ -1,0 +1,92 @@
+app:
+  version: V1.00.00.0
+
+# Open API Configurations
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    path: /swagger
+    enabled: true
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: merchant-service
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URI:http://localhost:8888}
+  # profiles:
+  #   active: native
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:192.168.20.29}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:epic_ipg}
+    username: ${MYSQL_USERNAME:epicpay}
+    password: ${MYSQL_PASSWORD:Password@123}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      log-condition-evaluation-delta: false
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    hostname: localhost
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    prometheus:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+# JWT Configurations
+jwt:
+  secret:
+    key: 4d18dc1f7aeb498671077ac77227a985d38ac11e6c18686c3fa1562990419e5c
+  expiration:
+    time: 1440
+
+logging:
+  level:
+    org:
+      springframework: WARN
+      hibernate: WARN
+    com:
+      epic:
+        merchant: TRACE
+    org.springframework.boot.context.properties: DEBUG
+  file:
+    path: ${file.root.path}/LOGS
+
+file:
+  root:
+    path: /opt
+  max:
+    file-size: 1024MB
+  upload-dir: ${file.root.path}/FILES/
+  temp-dir: ${file.root.path}/TEMP_FILES/
+  error-dir: ${file.root.path}/LOGS/ERROR/
+  encodekey: h8hGqKO/jMriLddfo7xNIg==
+
+server-url:
+  http://192.168.20.29
